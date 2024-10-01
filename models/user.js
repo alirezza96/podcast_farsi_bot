@@ -25,6 +25,10 @@ const schema = {
         minLength: 5,
         maxLength: 15
     },
+    is_admin: {
+        type: Boolean,
+        default: false
+    }
 }
 const userModel = model("user", schema)
 
