@@ -4,7 +4,7 @@ import podcastSchema from "../validators/podcast.js"
 
 
 export const find = async (req, res) => {
-    const podcasts = await podcastsModel.find({}).lean()
+    const podcasts = await podcastsModel.find({})
     if (!podcasts.length) return res.status(404).json({ message: "podcasts not found" })
     res.json({ data: podcasts })
 }
@@ -19,8 +19,8 @@ export const findById = async (req, res) => {
 
 export const create = async (req, res) => {
     // is valid
-    const { title, author } = req.body
-    const validationResult = podcastSchema.safeParse({ title, author })
+    const { title, artistId } = req.body
+    const validationResult = podcastSchema.safeParse({ title, artistId })
     if (!validationResult.success) return res.status(400).json({
         message: validationResult.error.errors[0].message,
         errors: validationResult.error.flatten().fieldErrors
@@ -28,12 +28,12 @@ export const create = async (req, res) => {
     // is not exits
     const podcast = await podcastsModel.findOne({
         $and: [
-            { title }, { author }
+            { title }, { artistId }
         ]
     })
-    if (podcast) return res.status(401).json({ message: "podcast with this title and author already exists" })
-    await podcastsModel.create({ title, author })
-    res.status(301).json({ message: "podcast created" })
+    if (podcast) return res.status(401).json({ message: "podcast with this title and artist already exists" })
+    const newPodcast = await podcastsModel.create({ title, artistId })
+    res.status(301).json({ message: "podcast created", data: newPodcast })
 }
 
 export const remove = async (req, res) => {

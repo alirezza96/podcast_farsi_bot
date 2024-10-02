@@ -1,4 +1,5 @@
 import z from "zod"
+import { objectIdSchema } from "../utils/helper.js"
 
 const schema = {
     title: z
@@ -6,11 +7,7 @@ const schema = {
         .trim()
         .min(3)
         .max(40)
-    , author: z
-        .string()
-        .trim()
-        .min(3)
-        .max(20)
+    , artistId: objectIdSchema
 }
 
 const podcastSchema = z.object(schema).strict()
