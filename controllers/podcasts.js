@@ -35,6 +35,48 @@ export const create = async (req, res) => {
     const newPodcast = await podcastsModel.create({ title, artistId })
     res.status(301).json({ message: "podcast created", data: newPodcast })
 }
+//   /:id
+export const update = async (req, res) => {
+    const { id } = req.params
+    if (!isValidObjectId(id)) return res
+        .status(400)
+        .json({
+            message: "objectId not valid"
+        })
+    const { title, artistId } = req.body
+    const validationResult = podcastSchema.safeParse({ title, artistId })
+    if (!validationResult.success) return res
+        .status(400)
+        .json({
+            message: validationResult.error.errors[0].message,
+            errors: validationResult.error.flatten().fieldErrors
+        })
+    try {
+
+        const podcast = await podcastsModel.findByIdAndUpdate(id, {
+            $set: {
+                title,
+                artistId
+            },
+        },
+            { new: true }
+        )
+        if (!podcast) return res.status(404).json({
+            message: "podcast not found"
+        })
+        res
+            .status(200)
+            .json({
+                message: "podcast edited",
+                data: podcast
+            })
+    } catch (error) {
+        res.status(500).json({
+            message: "server error",
+            error: error.message
+        })
+    }
+}
 
 export const remove = async (req, res) => {
     const { id } = req.params

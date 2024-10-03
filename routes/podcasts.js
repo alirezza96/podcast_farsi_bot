@@ -1,5 +1,5 @@
 import express from "express"
-import { create, find, findById, remove } from "../controllers/podcasts.js"
+import { create, find, findById, remove, update } from "../controllers/podcasts.js"
 const podcastsRouter = express.Router()
 
 podcastsRouter.route("/")
@@ -7,5 +7,7 @@ podcastsRouter.route("/")
     .post(create)
 podcastsRouter.route("/:id")
     .get(findById)
+    .put(update)
     .delete(remove)
+
 export default podcastsRouter
