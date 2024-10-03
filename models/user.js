@@ -28,6 +28,10 @@ const schema = {
     is_admin: {
         type: Boolean,
         default: false
+    },
+    is_ban: {
+        type: Boolean,
+        default: false
     }
 }
 const userModel = model("user", schema)

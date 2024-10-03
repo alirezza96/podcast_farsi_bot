@@ -27,10 +27,16 @@ app.use(morgan("dev"))
 // global middlewares
 app.use("/api/users", usersRouter)
 // secure route  1- authenticated
-app.use(mustRegistered)
+app.use((req, res, next) => {
+    console.log("mustRegistered middleware Run!")
+    next()
+}, mustRegistered)
 app.use("/api/comments", commentsRouter)
 // secure route  2- only admins
-app.use(mustAdmin)
+app.use((req, res, next) => {
+    console.log("mustAdmin middleware Run!")
+    next()
+}, mustAdmin)
 app.use("/api/podcasts", podcastsRouter)
 app.use("/api/artists", artistsRouter)
 

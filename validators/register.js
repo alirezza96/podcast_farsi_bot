@@ -12,7 +12,11 @@ export const userSchema = z.object({
         .trim()
         .min(5)
         .max(15),
-    password: z.string(),
+    password: z
+        .string()
+        .min(5)
+        .max(15)
+    ,
     confirmPassword: z.string(),
     email: z.string().email(),
     age: z.number().min(18)

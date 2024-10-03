@@ -4,7 +4,7 @@ import podcastSchema from "../validators/podcast.js"
 
 
 export const find = async (req, res) => {
-    const podcasts = await podcastsModel.find({})
+    const podcasts = await podcastsModel.find({}).populate("artist")
     if (!podcasts.length) return res.status(404).json({ message: "podcasts not found" })
     res.json({ data: podcasts })
 }
