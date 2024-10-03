@@ -34,6 +34,6 @@ const schema = {
         default: false
     }
 }
-const userModel = model("user", schema)
+const userModel = model("User", schema)
 
 export default userModel

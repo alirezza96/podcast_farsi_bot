@@ -6,5 +6,5 @@ const schema = {
     }
 }
 
-const artistsModel = model("artist", schema)
+const artistsModel = model("Artist", schema)
 export default artistsModel

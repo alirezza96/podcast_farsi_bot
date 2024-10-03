@@ -1,20 +1,21 @@
-import { Types, model } from "mongoose";
-const schema = {
-    title: {
-        type: String,
-        required: true
-    },
-    artist: {
-        type: Types.ObjectId,
-        ref: "artist"
-    },
-    comments: [
-        {
+import { Types, model, Schema } from "mongoose";
+const podcastSchema = Schema(
+    {
+        title: {
+            type: String,
+            required: true
+        },
+        artist: {
             type: Types.ObjectId,
-            ref: "comment"
+            ref: "Artist"
         }
-    ]
-}
+    }
+)
+podcastSchema.virtual("comments", {
+    rel: "Comment",
+    localField: "_id",
+    foreignField: "podcast_id"
+})
 
-const podcastsModel = model("podcast", schema)
+const podcastsModel = model("Podcast", podcastSchema)
 export default podcastsModel

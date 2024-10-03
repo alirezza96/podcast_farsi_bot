@@ -1,12 +1,12 @@
 import express from "express"
-import { create, find, findById, remove, update } from "../controllers/podcasts.js"
+import { create, find, findByTitle, remove, update } from "../controllers/podcasts.js"
 const podcastsRouter = express.Router()
 
 podcastsRouter.route("/")
     .get(find)
     .post(create)
 podcastsRouter.route("/:id")
-    .get(findById)
+    .get(findByTitle)
     .put(update)
     .delete(remove)
 

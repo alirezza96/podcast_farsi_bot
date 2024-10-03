@@ -1,23 +1,26 @@
 import { isValidObjectId } from "mongoose"
 import podcastsModel from "../models/podcast.js"
+import commentsModel from "../models/comments.js"
 import podcastSchema from "../validators/podcast.js"
-
 
 export const find = async (req, res) => {
     const podcasts = await podcastsModel
         .find({})
-        .populate("artist")
-        .populate("comments")
+        .populate("artist", "title -_id")
+        .select("title")
     if (!podcasts.length) return res.status(404).json({ message: "podcasts not found" })
     res.json({ data: podcasts })
 }
 
-export const findById = async (req, res) => {
-    const { id } = req.params
-    if (!isValidObjectId(id)) return res.status(400).json({ message: "object id is not valid" })
-    const podcast = await podcastsModel.findById(id)
+export const findByTitle = async (req, res) => {
+    const { id: title } = req.params
+    const podcast = await podcastsModel.findOne({ title })
+        .populate("artist", "-__v -_id")
+        .select("title")
+        .lean()
     if (!podcast) return res.status(404).json({ message: "podcast not found" })
-    res.json({ data: podcast })
+    const comments = await commentsModel.find({ podcast_id: podcast._id }).select("body")
+    res.json({ data: { ...podcast, comments } })
 }
 
 export const create = async (req, res) => {
