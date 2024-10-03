@@ -4,7 +4,10 @@ import podcastSchema from "../validators/podcast.js"
 
 
 export const find = async (req, res) => {
-    const podcasts = await podcastsModel.find({}).populate("artist")
+    const podcasts = await podcastsModel
+        .find({})
+        .populate("artist")
+        .populate("comments")
     if (!podcasts.length) return res.status(404).json({ message: "podcasts not found" })
     res.json({ data: podcasts })
 }
@@ -32,7 +35,7 @@ export const create = async (req, res) => {
         ]
     })
     if (podcast) return res.status(401).json({ message: "podcast with this title and artist already exists" })
-    const newPodcast = await podcastsModel.create({ title, artistId })
+    const newPodcast = await podcastsModel.create({ title, artist: artistId })
     res.status(301).json({ message: "podcast created", data: newPodcast })
 }
 //   /:id
@@ -56,7 +59,7 @@ export const update = async (req, res) => {
         const podcast = await podcastsModel.findByIdAndUpdate(id, {
             $set: {
                 title,
-                artistId
+                artist: artistId
             },
         },
             { new: true }

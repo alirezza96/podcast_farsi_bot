@@ -7,7 +7,6 @@ export const find = async (req, res) => {
 }
 
 export const create = async (req, res) => {
-    console.log(1)
     const { title } = req.body
     // is valid?
     const validationResult = artistSchema.safeParse({ title })
