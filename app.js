@@ -11,6 +11,7 @@ import podcastsRouter from "./routes/podcasts.js"
 import commentsRouter from "./routes/comments.js"
 import mustAdmin from "./middlewares/mustAdmin.js"
 import mustRegistered from "./middlewares/mustRegistered.js"
+import uploader from "./middlewares/multer.js"
 //import cors
 const port = process.env.SERVER_PORT
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, "public")))
 //3rdParty middlewares
 app.use(helmet())
 app.use(morgan("dev"))
+app.use
 // global middlewares
 app.use("/api/users", usersRouter)
 // secure route  1- authenticated
@@ -40,16 +42,25 @@ app.use((req, res, next) => {
 app.use("/api/podcasts", podcastsRouter)
 app.use("/api/artists", artistsRouter)
 
+app.get("/", (req, res) => {
+    const username = "alireza"
+    res.json({username})
+})
 
 
 
 
 
 
-
-
+// page not found
 app.use((req, res) => {
     res.status(404).json({ message: "page not found" })
+})
+// error handling
+app.use((err, req, res, next) => {
+    res
+        .status(err.status || 500)
+        .json({ message: err.message || "Internal Server Error" })
 })
 
 app.listen(port, () => console.log("app listen on port:", port))
